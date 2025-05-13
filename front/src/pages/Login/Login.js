@@ -4,7 +4,7 @@ import "./Login.css";
 const Login = () => {
   return (
     <div className="form-wrapper">
-      <form className="login-form">
+      <form className="form">
         <div className="form-field">
           <label for="email">Email:</label>
           <input type="email" id="email" className="form-input" />
@@ -15,9 +15,9 @@ const Login = () => {
           <input type="password" id="password" className="form-input" />
         </div>
 
-        <button className="login-button">Login</button>
+        <button className="button">Login</button>
 
-        <a href="#" className="forgot-password">
+        <a href="/forgot-password" className="forgot-password">
           Forgot Password
         </a>
       </form>
