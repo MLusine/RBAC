@@ -40,12 +40,14 @@
 }
 .button {
   padding: 10px 35px;
-  margin: 0 auto;
   border-radius: 15px;
   cursor: pointer;
   background: #c209c1;
   border: 1px solid #c209c1;
   color: #fff;
+}
+.log-btn {
+  margin: 0 auto;
 }
 .forgot-password {
   color: #c209c1;
