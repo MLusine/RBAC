@@ -10,9 +10,6 @@ const EditUser = () => {
     surname: "",
   });
 
-  const [loading, setLoading] = useState(true);
-  const [notFound, setNotFound] = useState(false);
-
   useEffect(() => {
     const fetchUser = async () => {
       try {

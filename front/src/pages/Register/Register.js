@@ -1,45 +1,76 @@
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useSearchParams } from "react-router-dom";
 
 const Register = () => {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
   const { token } = useParams();
   const [form, setForm] = useState({
     name: "",
     surname: "",
     phone: "",
     password: "",
+    avatar: "",
   });
+
+  const [avatar, setAvatar] = useState(null);
+  const [preview, setPreview] = useState(null);
 
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = await fetch(
-      `http://localhost:5000/api/users/register/${token}`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
-      }
-    );
 
-    const data = await res.json();
-    if (res.ok) {
-      alert("Registration successful. You can log in.");
-      navigate("/");
-    } else {
-      alert(data.message);
+    const formData = new FormData();
+
+    formData.append("name", form.name);
+    formData.append("surname", form.surname);
+    formData.append("phone", form.phone);
+    formData.append("password", form.password);
+
+    if (avatar) {
+      formData.append("avatar", avatar);
     }
+
+    try {
+      const res = await fetch(
+        `http://localhost:5000/api/users/register/${token}`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      const data = await res.json();
+
+      if (res.ok) {
+        alert("Registration successful. You can log in.");
+        navigate("/");
+      } else {
+        alert(data.message || "Registration failed");
+      }
+    } catch (err) {
+      console.error("Registration error:", err);
+      alert("Something went wrong");
+    }
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    console.log("file--", file);
+    setAvatar(file);
+    setPreview(URL.createObjectURL(file));
   };
 
   return (
     <div className="form-wrapper">
       <form onSubmit={handleSubmit} className="form">
         <h2>Complete Your Registration</h2>
+        <div>
+          <label htmlFor="avatar">Browse Avatar:</label>
+          <input type="file" accept="image/*" onChange={handleFileChange} />
+          {preview && <img src={preview} alt="Preview" width="100" />}
+        </div>
         <input
           className="form-input"
           name="name"

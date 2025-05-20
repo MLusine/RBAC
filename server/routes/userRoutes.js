@@ -5,9 +5,10 @@ const bcrypt = require("bcrypt");
 const User = require("../models/user");
 const { verifyToken } = require("../middlewares/authMiddleware");
 const { authMiddleware } = require("../middlewares/authMiddleware");
-const { getUserById } = require("../middlewares/authMiddleware");
 const { isAdmin } = require("../middlewares/roleMiddleware");
 const { sendInviteEmail } = require("../utils/sendEmail");
+const multer = require("multer");
+const upload = multer({ dest: "uploads/" });
 
 router.post("/invite", verifyToken, isAdmin, async (req, res) => {
   const { email } = req.body;
@@ -30,36 +31,37 @@ router.post("/invite", verifyToken, isAdmin, async (req, res) => {
   });
 });
 
-router.post("/register/:token", async (req, res) => {
+router.post("/register/:token", upload.single("avatar"), async (req, res) => {
   const { token } = req.params;
   const { password, name, surname, phone } = req.body;
-
-  const user = await User.findOne({ inviteToken: token, status: "invited" });
-
-  if (!user) {
-    console.log("User not found for token:", token);
-    return res.status(400).json({ message: "Invalid or expired token" });
-  }
-
-  const salt = await bcrypt.genSalt(10);
-  const hashedPassword = await bcrypt.hash(password, salt);
-
-  user.password = hashedPassword;
-  user.name = name;
-  user.surname = surname;
-  user.phone = phone;
-  user.status = "active";
-  user.inviteToken = undefined;
+  const avatar = req.file ? req.file.path : null;
 
   try {
+    const user = await User.findOne({ inviteToken: token, status: "invited" });
+
+    if (!user) {
+      console.log("User not found for token:", token);
+      return res.status(400).json({ message: "Invalid or expired token" });
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    user.password = hashedPassword;
+    user.name = name;
+    user.surname = surname;
+    user.phone = phone;
+    user.status = "active";
+    user.inviteToken = undefined;
+    if (avatar) user.avatar = avatar;
+
     await user.save();
+
     res.json({ message: "Registration complete" });
   } catch (err) {
     console.error("Error saving user:", err);
     res.status(500).json({ message: "Error saving user" });
   }
-
-  res.json({ message: "Registration complete" });
 });
 
 router.get("/all", verifyToken, async (req, res) => {

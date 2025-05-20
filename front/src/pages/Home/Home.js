@@ -106,12 +106,13 @@ const Home = () => {
         <ul className="user-list">
           {users.map((user) => (
             <li key={user._id} className="user-list-item">
-              <img
-                src={user.avatar || "/default-avatar.png"}
-                alt="avatar"
-                className="avatar"
-              />
-
+              <div className="avatar">
+                <img
+                  src={`http://localhost:5000/${user.avatar}`}
+                  alt="avatar"
+                  className="avatar-photo"
+                />
+              </div>
               <span className="name">
                 {user.name} {user.surname}
               </span>
