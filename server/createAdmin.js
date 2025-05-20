@@ -1,10 +1,9 @@
+require('dotenv').config();
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const User = require("./models/user");
 
-mongoose.connect(
-  "mongodb+srv://lusinemnatsakanyan85:AmLtnIdYW0lrpcro@cluster0.x1gco8a.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
-);
+mongoose.connect(process.env.MONGO_URI);
 (async () => {
   try {
     const existingAdmin = await User.findOne({ role: "admin" });
@@ -13,7 +12,7 @@ mongoose.connect(
       return process.exit(0);
     }
 
-    const password = await bcrypt.hash("admin123", 10);
+    const password = await bcrypt.hash(process.env.ADMIN_PASS, 10);
     const admin = new User({
       email: "admin@example.com",
       password: password,
