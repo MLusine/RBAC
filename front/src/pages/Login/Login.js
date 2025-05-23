@@ -1,15 +1,14 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Login.css";
 
 const Login = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
-
     try {
       const res = await fetch("http://localhost:5000/api/auth/login", {
         method: "POST",
@@ -32,6 +31,7 @@ const Login = () => {
 
   return (
     <div className="form-wrapper">
+      <h1>Login</h1>
       <form className="form" onSubmit={handleLogin}>
         <div className="form-field">
           <label for="email">Email:</label>
@@ -43,7 +43,6 @@ const Login = () => {
             onChange={(e) => setEmail(e.target.value)}
           />
         </div>
-
         <div className="form-field">
           <label for="password">Password:</label>
           <input
@@ -54,11 +53,9 @@ const Login = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-
         <button className="button log-btn" type="submit">
           Login
         </button>
-
         <a href="/forgot-password" className="forgot-password">
           Forgot Password?
         </a>

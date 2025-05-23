@@ -26,10 +26,10 @@ exports.login = async (req, res) => {
 
 exports.sendInvite = async (req, res) => {
   const { email } = req.body;
-  const inviteToken = jwt.sign({ email }, JWT_SECRET, { expiresIn: "3d" });
+  const inviteToken = jwt.sign({ email }, JWT_SECRET, { expiresIn: "1d" });
   await User.create({ email, inviteToken });
   await sendInviteEmail(email, inviteToken);
-  res.json({ message: "Invite sent" });
+  res.json({ message: "Invite sent!" });
 };
 
 exports.register = async (req, res) => {

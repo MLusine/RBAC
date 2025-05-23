@@ -1,6 +1,4 @@
 const User = require("../models/user");
-const path = require("path");
-const authMiddleware = require("../middlewares/authMiddleware");
 
 exports.deleteUser = async (req, res) => {
   try {
@@ -26,7 +24,7 @@ exports.uploadAvatarController = async (req, res) => {
       return res.status(400).json({ message: "No file uploaded" });
     }
     const userId = req.user.id;
-    const avatarPath = req.file.path;
+    const avatarPath = `uploads/photos/${req.file.filename}`;
 
     const updatedUser = await User.findByIdAndUpdate(
       userId,
@@ -38,7 +36,7 @@ exports.uploadAvatarController = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    res.json({ message: "Avatar uploaded", avatarPath: updatedUser.avatar });
+    res.status(201).json({ message: "Uploaded", url: avatarPath });
   } catch (err) {
     console.error("Avatar upload error:", err);
     res.status(500).json({ message: "Server error during avatar upload" });

@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-import "./CreateUser.css";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 const CreateUser = () => {
-  const navigate = useNavigate();
   const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleInvite = async () => {
+    setLoading(true);
+
     try {
       const res = await fetch("http://localhost:5000/api/users/invite", {
         method: "POST",
@@ -27,12 +27,14 @@ const CreateUser = () => {
     } catch (err) {
       console.error("Error inviting user", err);
       alert("Error inviting user");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="wrapper create-user-wrapper">
-      <h2 className="header">Create User</h2>
+    <div className="form-wrapper ">
+      <h1>Create User</h1>
       <div className="form">
         <input
           type="email"
@@ -40,9 +42,10 @@ const CreateUser = () => {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           className="form-input"
+          disabled={loading}
         />
-        <button onClick={handleInvite} className="button">
-          Send Invite
+        <button onClick={handleInvite} className="button" disabled={loading}>
+          {loading ? "Sending..." : "Send Invite"}
         </button>
         <a href="/home" className="btn back">
           {" "}

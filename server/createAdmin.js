@@ -14,7 +14,7 @@ mongoose.connect(process.env.MONGO_URI);
 
     const password = await bcrypt.hash(process.env.ADMIN_PASS, 10);
     const admin = new User({
-      email: "admin@example.com",
+      email: process.env.ADMIN_MAIL,
       password: password,
       role: "admin",
       status: "active",

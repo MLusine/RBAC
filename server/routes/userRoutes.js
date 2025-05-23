@@ -2,13 +2,15 @@ const express = require("express");
 const router = express.Router();
 const crypto = require("crypto");
 const bcrypt = require("bcrypt");
-const User = require("../models/user");
-const { verifyToken } = require("../middlewares/authMiddleware");
-const { authMiddleware } = require("../middlewares/authMiddleware");
+const {
+  authMiddleware,
+  verifyToken,
+} = require("../middlewares/authMiddleware");
 const { isAdmin } = require("../middlewares/roleMiddleware");
 const { sendInviteEmail } = require("../utils/sendEmail");
 const multer = require("multer");
-const upload = multer({ dest: "uploads/" });
+const upload = multer({ dest: "uploads/photos/" });
+const User = require("../models/user");
 
 router.post("/invite", verifyToken, isAdmin, async (req, res) => {
   const { email } = req.body;
@@ -26,7 +28,7 @@ router.post("/invite", verifyToken, isAdmin, async (req, res) => {
   await sendInviteEmail(email, token);
 
   return res.status(200).json({
-    message: "Invite sent",
+    message: "Invite sent!",
     token,
   });
 });
@@ -79,11 +81,7 @@ router.put("/:id", verifyToken, isAdmin, async (req, res) => {
   const { name, surname } = req.body;
 
   try {
-    const user = await User.findByIdAndUpdate(
-      id,
-      { name, surname },
-      { new: true }
-    );
+    const user = await User.findByIdAndUpdate(id, { name, surname });
     if (!user) return res.status(404).json({ message: "User not found" });
 
     res.json(user);

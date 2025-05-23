@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
 const EditUser = () => {
@@ -59,8 +59,8 @@ const EditUser = () => {
   };
 
   return (
-    <div className="create-user-wrapper form-wrapper">
-      <h2>Edit </h2>
+    <div className="form-wrapper">
+      <h1>Edit </h1>
       <form className="form" onSubmit={handleSubmit}>
         <input
           className="form-input"

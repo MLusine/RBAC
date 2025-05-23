@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
@@ -18,8 +18,8 @@ const ForgotPassword = () => {
   };
   return (
     <div className="form-wrapper">
+      <h1>Reset your password</h1>
       <form className="form" onSubmit={handleSubmit}>
-        <h2>Reset your password</h2>
         <p>
           To reset your password, enter your email below and submit. An email
           will be sent to you with instructions about how to complete the

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 
@@ -62,8 +62,8 @@ const ResetPassword = () => {
 
   return (
     <div className="form-wrapper">
+        <h1>Reset Your Password</h1>
       <form className="form" onSubmit={handleSubmit}>
-        <h2>Reset Your Password</h2>
         <div className="form-field">
           <label htmlFor="email">Email:</label>
           <input

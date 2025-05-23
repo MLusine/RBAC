@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
 const Register = () => {
@@ -57,15 +57,14 @@ const Register = () => {
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    console.log("file--", file);
     setAvatar(file);
     setPreview(URL.createObjectURL(file));
   };
 
   return (
     <div className="form-wrapper">
+        <h1>Complete Your Registration</h1>
       <form onSubmit={handleSubmit} className="form">
-        <h2>Complete Your Registration</h2>
         <div>
           <label htmlFor="avatar">Browse Avatar:</label>
           <input type="file" accept="image/*" onChange={handleFileChange} />
